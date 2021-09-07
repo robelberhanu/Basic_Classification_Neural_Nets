@@ -95,8 +95,47 @@ With the model trained, you can use it to make predictions about some images.
 The model's linear outputs, logits. Attach a softmax layer to convert the logits to probabilities, which are easier to interpret.
 '''
 
-probability_model = tf.keras.Sequential([model, tf.keras.layers.softmax()])
+probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
 predictions = probability_model.predict(test_images)
-predictions[0]
+prediction_arry = predictions[0]
+print("Prediction array: ", prediction_arry)
+
+'''
+A prediction is an array of 10 numbers. 
+They represent the model's "confidence" that the image corresponds to each of the 10 different articles of clothing. 
+You can see which label has the highest confidence value:
+
+'''
+
+most_confident = np.argmax(predictions[0])
+print("Most confident prediction:", most_confident)
 
 
+'''
+So, the model is most confident that this image is an ankle boot, or class_names[9]. 
+Examining the test label shows that this classification is correct:
+'''
+
+true_lable = test_labels[0]
+print('True lable:', true_lable)
+
+# Graph this to look at the full set of 10 class predictions.
+
+def plot_image(i, predictions_arry, true_lable, img):
+    true_lable, img = true_lable[i], img[i]
+    plt.grid(False)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(img, cmap=plt.cm.binary)
+
+
+    predicted_lable = np.argmax(predictions_arry)
+    if predicted_lable == true_lable:
+        color = 'blue'
+    else:
+        color = 'red'
+    
+plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
+                                100*np.max(predictions_array),
+                                class_names[true_label]),
+                                color=color)
