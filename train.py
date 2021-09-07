@@ -54,18 +54,49 @@ model = tf.keras.Sequential([
 ])
 
 # Compile the Model.
-#Before the model is ready for training, it needs a few more settings. These are added during the model's compile step:
 
-#Loss function —This measures how accurate the model is during training. You want to minimize this function to "steer" the model in the right direction.
-#Optimizer —This is how the model is updated based on the data it sees and its loss function.
-#Metrics —Used to monitor the training and testing steps. The following example uses accuracy, the fraction of the images that are correctly classified.
+'''
+Before the model is ready for training, it needs a few more settings. 
+These are added during the model's compile step:
+ 
+-> Loss function —This measures how accurate the model is during training. You want to minimize this function to "steer" the model in the right direction.
+-> Optimizer —This is how the model is updated based on the data it sees and its loss function.
+-> Metrics —Used to monitor the training and testing steps. The following example uses accuracy, the fraction of the images that are correctly classified.
 
+'''
 
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
 
+#Training the model involves the following steps.
 
+'''
+1. Feed the training data to the model. In this example, the training data is in the train_images and train_labels arrays.
+2. The model learns to associate images and labels.
+3. You ask the model to make predictions about a test set—in this example, the test_images array.
+4. Verify that the predictions match the labels from the test_labels array.
+
+'''
+
+
+# 1.Feed the model
+model.fit(train_images, train_labels, epochs=10)
+
+# 2. Evaluate accuracy
+test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
+print('\nTest accuracy:', test_acc)
+
+#3. Make PREDICTIONS
+
+'''
+With the model trained, you can use it to make predictions about some images. 
+The model's linear outputs, logits. Attach a softmax layer to convert the logits to probabilities, which are easier to interpret.
+'''
+
+probability_model = tf.keras.Sequential([model, tf.keras.layers.softmax()])
+predictions = probability_model.predict(test_images)
+predictions[0]
 
 
