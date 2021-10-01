@@ -82,7 +82,7 @@ model.compile(optimizer='adam',
 
 
 # 1.Feed the model
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels,   )
 
 # 2. Evaluate accuracy
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
@@ -135,7 +135,19 @@ def plot_image(i, predictions_arry, true_lable, img):
     else:
         color = 'red'
     
-plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
+    plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
                                 100*np.max(predictions_array),
                                 class_names[true_label]),
                                 color=color)
+
+def plot_value_array(i, predictions_arry, true_lable):
+    true_lable = true_lable[i]
+    plt.grid(False)
+    plt.xticks(range(10))
+    plt.yticks([])
+    thisplot = plt.bar(range(10), predictions_arry, color='#777777')
+    plt.ylim([0,1])
+    predicted_lable = np.argmax(predictions_arry)
+
+    thisplot[predicted_lable].set_color('red')
+    thisplot[true_lable].set_color('blue')
